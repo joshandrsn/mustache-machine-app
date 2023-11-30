@@ -1,0 +1,25 @@
+<div class="container">
+
+    <div class="controls">
+
+        <button (click)="triggerSnapshot()">Capture</button>
+        <button (click)="toggleWebcam()">Toggle Webcam</button>
+
+        <div *ngIf="showWebcam">
+            <webcam
+                #webcam
+                [height]="400"
+                [width]="600"
+                [trigger]="triggerObservable" (imageCapture)="handleImage($event)"
+                [videoOptions]="videoOptions"
+                [imageQuality]="1"
+            ></webcam>
+        </div>
+
+    </div>
+
+    <div class="snapshot" *ngIf="webcamImage">
+        <img id="capturedImage" [src]="webcamImage.imageAsDataUrl" height="400" alt="Captured Webcam Image"/>
+    </div>
+
+</div>

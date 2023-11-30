@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+  align-items: flex-start; /* Align items to the start of the container */
+}
+
+webcam {
+  /* Optional: Adjust width and height of the webcam element */
+  margin-right: 10px; /* Optional: Add margin for spacing between webcam and button */
+}
