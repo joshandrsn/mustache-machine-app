@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-
 import * as tf from '@tensorflow/tfjs';
 import * as faceDetection from '@tensorflow-models/face-detection';
 import * as mobilenet from '@tensorflow-models/mobilenet';
@@ -15,20 +14,13 @@ export class FacialRecognitionComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.loadFaceApi();
-  }
-
-  async loadFaceApi() {
-    //TODO see if I can preload some of these libraries for better speed
-    // await tfc.ready();????
   }
 
   public async triggerDetection(): Promise<void> {
+    //TODO pull from @ngrx/store
     const img = <HTMLImageElement>document.getElementById('capturedImage');
 
-    this.attemptMobilenetPredictions(img);
-
-    // TODO why is this needed to prevent a "backend registry error"???
+    // this seems to be needed to prevent a "backend registry error", however, I'm not using the value and it is rather expensive
     const tensor = tf.browser.fromPixels(img);
 
     const detector = await faceDetection.createDetector(
@@ -48,6 +40,8 @@ export class FacialRecognitionComponent implements OnInit {
     }
 
     this.setFacePaintImage(faces, img);
+
+    await this.attemptMobilenetPredictions(img);
   }
 
   private setFacePaintImage(faces: faceDetection.Face[], img: HTMLImageElement): void {

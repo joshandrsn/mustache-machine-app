@@ -1,25 +1,26 @@
 <div class="container">
 
-    <div class="controls">
+    <div>
 
         <button (click)="triggerSnapshot()">Capture</button>
-        <button (click)="toggleWebcam()">Toggle Webcam</button>
+        <button (click)="startCamera()">Start Webcam</button>
+        <button (click)="stopCamera()">Stop Webcam</button>
 
-        <div *ngIf="showWebcam">
-            <webcam
-                #webcam
-                [height]="400"
-                [width]="600"
-                [trigger]="triggerObservable" (imageCapture)="handleImage($event)"
-                [videoOptions]="videoOptions"
-                [imageQuality]="1"
-            ></webcam>
+        <div *ngIf="webCam$ | async as w">
+            <div *ngIf="w.isCameraOn">
+                <webcam
+                    #webcam
+                    [height]="400"
+                    [width]="600"
+                    [trigger]="triggerObservable" (imageCapture)="handleImage($event)"
+                    [videoOptions]="videoOptions"
+                    [imageQuality]="1"
+                ></webcam>
+            </div>
+
+            <div class="snapshot" *ngIf="w.currentImage">
+                <img id="capturedImage" [src]="w.currentImage" height="400" alt="Captured Webcam Image"/>
+            </div>
         </div>
 
     </div>
-
-    <div class="snapshot" *ngIf="webcamImage">
-        <img id="capturedImage" [src]="webcamImage.imageAsDataUrl" height="400" alt="Captured Webcam Image"/>
-    </div>
-
-</div>

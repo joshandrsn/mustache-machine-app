@@ -1,6 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {WebcamImage, WebcamUtil} from 'ngx-webcam';
 import {Observable, Subject} from "rxjs";
+import {Store} from '@ngrx/store';
+import {captureImage, startCamera, stopCamera} from '../display.actions';
+import {WebcamState} from "../display.state";
 
 @Component({
   selector: 'app-webcam',
@@ -9,13 +12,13 @@ import {Observable, Subject} from "rxjs";
 })
 export class WebcamComponent implements OnInit {
   @ViewChild('webcam') webcamElement: any;
-  private _webcamImage: WebcamImage | undefined;
   public videoOptions: MediaTrackConstraints = {};
-  showWebcam = true; // Initially show the webcam
-
   private trigger: Subject<void> = new Subject<void>();
 
-  constructor() {
+  webCam$ : Observable<WebcamState>;
+
+  constructor(private store: Store<{webcamR: WebcamState}>) {
+    this.webCam$ = store.select('webcamR');
   }
 
   ngOnInit(): void {
@@ -34,14 +37,14 @@ export class WebcamComponent implements OnInit {
 
   public handleImage(webcamImage: WebcamImage): void {
     console.debug('received webcam image', webcamImage);
-    this._webcamImage = webcamImage;
+    this.store.dispatch(captureImage({payload: webcamImage.imageAsDataUrl}));
   }
 
-  public get webcamImage(): WebcamImage | undefined {
-    return this._webcamImage;
+  startCamera() {
+    this.store.dispatch(startCamera());
   }
 
-  toggleWebcam() {
-    this.showWebcam = !this.showWebcam;
+  stopCamera() {
+    this.store.dispatch(stopCamera());
   }
 }
