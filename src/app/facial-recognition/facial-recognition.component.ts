@@ -41,6 +41,9 @@ export class FacialRecognitionComponent implements OnInit {
 
     this.setFacePaintImage(faces, img);
 
+    //TODO using Mobilenet to get predictions out of the uploaded image, need to replace with a better library
+    // that detects facial features.  An open market Tensorflow.js model does not seem to be available, will need
+    // to train a model and upload it
     await this.attemptMobilenetPredictions(img);
   }
 
@@ -75,5 +78,37 @@ export class FacialRecognitionComponent implements OnInit {
 
     console.log('Predictions: ');
     console.log(predictions);
+
+    this.printInfoToTable(predictions);
   }
+
+  private printInfoToTable(predictions: Array<{ className: string; probability: number }>): void {
+    const table = document.createElement('table');
+    const headerRow = table.insertRow(0);
+    const header1 = document.createElement('th');
+    const header2 = document.createElement('th');
+
+    header1.textContent = 'Class Name';
+    header2.textContent = 'Probability';
+
+    headerRow.appendChild(header1);
+    headerRow.appendChild(header2);
+
+    predictions.forEach(prediction => {
+      const row = table.insertRow();
+      const cell1 = row.insertCell(0);
+      const cell2 = row.insertCell(1);
+      cell1.textContent = prediction.className;
+      cell2.textContent = prediction.probability.toString();
+    });
+
+    const containerElement = document.getElementById('tableContainer');
+
+    if (containerElement) {
+      containerElement.appendChild(table);
+    } else {
+      console.error('Container element not found.');
+    }
+  }
+
 }

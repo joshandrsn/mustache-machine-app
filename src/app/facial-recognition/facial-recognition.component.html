@@ -1,13 +1,16 @@
 <div class="container">
 
-  <div class="controls">
+  <div>
 
-    <button (click)="triggerDetection()">Detect</button>
+    <button (click)="triggerDetection()">Detect Faces and Analyze</button>
 
     <div>
       <canvas id="facePaintImage" width="533" height="400" style="border:1px solid grey"></canvas>
     </div>
 
+    <div id="tableContainer">
+      <!-- The table will be appended here -->
+    </div>
   </div>
 
 </div>
